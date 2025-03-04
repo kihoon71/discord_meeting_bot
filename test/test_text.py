@@ -4,7 +4,7 @@ import sys
 import os
 
 # 현재 스크립트 파일 기준으로 src 경로 추가
-sys.path.append(os.path.abspath("../src/UTIL"))
+sys.path.append(os.path.abspath("../src/transcribe"))
 
 # 이제 Text를 import 가능
 from Text import Text # Text.py 파일이 존재한다고 가정

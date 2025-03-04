@@ -169,3 +169,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+## etc
+./test/files/*
+*.ipynb_checkpoints
+*.ckpt
+*.mp3
+*.wav
+hyperparams.yaml
