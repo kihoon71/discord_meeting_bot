@@ -38,11 +38,8 @@ def transcribe():
 @pytest.mark.asyncio
 async def test_transcription(transcribe):
     audio = load_audio_to_memory('./files/test.wav')
-    print(type(audio))
-    
     result = await transcribe.transcribe(audio)
     assert result is not None
-    print(result)
     assert isinstance(result, list)
     assert isinstance(result[0], str)
 

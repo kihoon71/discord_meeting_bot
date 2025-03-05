@@ -38,6 +38,8 @@ def test_diarize(diarizer):
     
     processed_segments = diarizer.diarize_(test_wav, num_speakers)
 
+    print(processed_segments)
+
     num_labels = {seg["label"] for seg in processed_segments}
 
     # Validate that the diarization process is done correctly

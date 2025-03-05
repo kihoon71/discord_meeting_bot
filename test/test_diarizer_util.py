@@ -66,29 +66,32 @@ def test_create_temp_file_invalid_input():
 
 def test_process_segments_merging():
     # Test that the postprocess_segments function sorts segments by start time.
-   segments = [
-        {"start_sample": 0.0, "end_sample": 14.2, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 14.9, "end_sample": 56.1, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 56.5, "end_sample": 68.5, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 68.6, "end_sample": 70.6, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 70.7, "end_sample": 92.0, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 92.0, "end_sample": 99.6, "label": "speaker_SPEAKER_00"},
-        {"start_sample": 99.9, "end_sample": 119.1, "label": "speaker_SPEAKER_00"},
-        {"start_sample": 119.3, "end_sample": 119.9, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 119.9, "end_sample": 120.0, "label": "speaker_SPEAKER_00"}
+    # 
+    segments = [
+    {"start_sample": 0.0, "end_sample": 14.2, "label": "speaker_SPEAKER_01", "start": 0.0, "end": 14.2},
+    {"start_sample": 14.9, "end_sample": 56.1, "label": "speaker_SPEAKER_01", "start": 14.9, "end": 56.1},
+    {"start_sample": 56.5, "end_sample": 68.5, "label": "speaker_SPEAKER_01", "start": 56.5, "end": 68.5},
+    {"start_sample": 68.6, "end_sample": 70.6, "label": "speaker_SPEAKER_01", "start": 68.6, "end": 70.6},
+    {"start_sample": 70.7, "end_sample": 92.0, "label": "speaker_SPEAKER_01", "start": 70.7, "end": 92.0},
+    {"start_sample": 92.0, "end_sample": 99.6, "label": "speaker_SPEAKER_00", "start": 92.0, "end": 99.6},
+    {"start_sample": 99.9, "end_sample": 119.1, "label": "speaker_SPEAKER_00", "start": 99.9, "end": 119.1},
+    {"start_sample": 119.3, "end_sample": 119.9, "label": "speaker_SPEAKER_01", "start": 119.3, "end": 119.9},
+    {"start_sample": 119.9, "end_sample": 120.0, "label": "speaker_SPEAKER_00", "start": 119.9, "end": 120.0}
     ]
-   
-   expected_results = [
-        {"start_sample": 0.0, "end_sample": 92.0, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 92.0, "end_sample": 119.1, "label": "speaker_SPEAKER_00"},
-        {"start_sample": 119.3, "end_sample": 119.9, "label": "speaker_SPEAKER_01"},
-        {"start_sample": 119.9, "end_sample": 120.0, "label": "speaker_SPEAKER_00"}
+    
+    expected_results = [
+    {"start_sample": 0.0, "end_sample": 92.0, "label": "speaker_SPEAKER_01", "start": 0.0, "end": 92.0},
+    {"start_sample": 92.0, "end_sample": 119.1, "label": "speaker_SPEAKER_00", "start": 92.0, "end": 119.1},
+    {"start_sample": 119.3, "end_sample": 119.9, "label": "speaker_SPEAKER_01", "start": 119.3, "end": 119.9},
+    {"start_sample": 119.9, "end_sample": 120.0, "label": "speaker_SPEAKER_00", "start": 119.9, "end": 120.0}
     ]
-   merged_segments = process_segments(segments)
-   
-   assert len(merged_segments) == len(expected_results), "Segment count mismatch."
-   
-   for i, seg in enumerate(merged_segments):
+
+
+    merged_segments = process_segments(segments)
+
+    assert len(merged_segments) == len(expected_results), "Segment count mismatch."
+
+    for i, seg in enumerate(merged_segments):
         assert seg['start_sample'] == expected_results[i]["start_sample"], f"Start time mismatch at index {i}: expected {expected_results[i]['start_sample']}, got {seg['start_sample']}"
         assert seg["end_sample"] == expected_results[i]["end_sample"], f"Stop time mismatch at index {i}: expected {expected_results[i]['end_sample']}, got {seg['end_sample']}"
         
@@ -96,21 +99,21 @@ def test_process_segments_merging():
 
 def test_process_segments_with_label_overlap():
     segments = [
-        {"start_sample": 0.0, "end_sample": 10.0, "label": "A"},
-        {"start_sample": 5.0, "end_sample": 15.0, "label": "B"},  # Overlaps with "A"
-        {"start_sample": 15.0, "end_sample": 20.0, "label": "A"},
-        {"start_sample": 18.0, "end_sample": 25.0, "label": "B"},  # Overlaps with "A"
-        {"start_sample": 26.0, "end_sample": 30.0, "label": "A"},
-        {"start_sample": 28.0, "end_sample": 35.0, "label": "B"}   # Overlaps with "A"
+    {"start_sample": 0.0, "end_sample": 10.0, "label": "A", "start": 0.0, "end": 10.0},
+    {"start_sample": 5.0, "end_sample": 15.0, "label": "B", "start": 5.0, "end": 15.0},  # Overlaps with "A"
+    {"start_sample": 15.0, "end_sample": 20.0, "label": "A", "start": 15.0, "end": 20.0},
+    {"start_sample": 18.0, "end_sample": 25.0, "label": "B", "start": 18.0, "end": 25.0},  # Overlaps with "A"
+    {"start_sample": 26.0, "end_sample": 30.0, "label": "A", "start": 26.0, "end": 30.0},
+    {"start_sample": 28.0, "end_sample": 35.0, "label": "B", "start": 28.0, "end": 35.0}   # Overlaps with "A"
     ]
 
     expected_results = [
-        {"start_sample": 0.0, "end_sample": 10.0, "label": "A"},  # "A" remains separate
-        {"start_sample": 5.0, "end_sample": 15.0, "label": "B"},  # "B" remains separate
-        {"start_sample": 15.0, "end_sample": 20.0, "label": "A"}, # "A" remains separate
-        {"start_sample": 18.0, "end_sample": 25.0, "label": "B"}, # "B" remains separate
-        {"start_sample": 26.0, "end_sample": 30.0, "label": "A"}, # "A" remains separate
-        {"start_sample": 28.0, "end_sample": 35.0, "label": "B"}  # "B" remains separate
+        {"start_sample": 0.0, "end_sample": 10.0, "label": "A", "start": 0.0, "end": 10.0},  # "A" remains separate
+        {"start_sample": 5.0, "end_sample": 15.0, "label": "B", "start": 5.0, "end": 15.0},  # "B" remains separate
+        {"start_sample": 15.0, "end_sample": 20.0, "label": "A", "start": 15.0, "end": 20.0}, # "A" remains separate
+        {"start_sample": 18.0, "end_sample": 25.0, "label": "B", "start": 18.0, "end": 25.0}, # "B" remains separate
+        {"start_sample": 26.0, "end_sample": 30.0, "label": "A", "start": 26.0, "end": 30.0}, # "A" remains separate
+        {"start_sample": 28.0, "end_sample": 35.0, "label": "B", "start": 28.0, "end": 35.0}  # "B" remains separate
     ]
 
     merged_segments = process_segments(segments)
@@ -142,9 +145,10 @@ def test_load_audio_to_memory(tmp_path, sample_audio):
     assert compare_data == sample_audio, "Loaded audio data should match the original audio data"
 
 
-def test_split_audio_memory(sample_audio):
+def test_split_audio_memory():
     """Tests if split_audio_memory correctly extracts a segment from audio."""
-    split_audio = split_audio_memory(sample_audio, 200, 800)  # Extract 200ms - 800ms
+    sample_audio = AudioSegment.from_file('./files/test.wav', format="wav")
+    split_audio = split_audio_memory(sample_audio, 1984544 , 3125616)  
 
     assert isinstance(split_audio, AudioSegment), "Split audio should be an AudioSegment object"
-    assert len(split_audio) == 600, "Extracted audio duration should be 600ms"
+    assert abs(len(split_audio) / 1000 - 23.773) < 0.001  # allowing tiny floating-point discrepancies

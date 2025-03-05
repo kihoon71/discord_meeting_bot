@@ -2,6 +2,7 @@ import os
 import io
 import tempfile
 from pydub import AudioSegment
+from pprint import pprint
 
 def create_temp_file(audio_input):
     """
@@ -47,8 +48,9 @@ def process_segments(segments):
     if not segments:
         return []
     
-    # 시작 시간이 오름차순으로 정렬되어 있지 않다면 정렬합니다.
-    segments = sorted(segments, key=lambda s: s["start_sample"])
+    # # 시작 시간이 오름차순으로 정렬되어 있지 않다면 정렬합니다.
+    segments = sorted(segments, key=lambda s: float(s["start_sample"]))
+    print(segments)
     
     merged = []
     current = segments[0].copy()
@@ -58,12 +60,14 @@ def process_segments(segments):
         if seg["label"] == current["label"]:
             # 현재 청크의 종료 시간을 업데이트
             current["end_sample"] = seg["end_sample"]
+            current['end'] = seg['end']
         else:
             # 화자가 바뀌면 현재 청크를 결과에 추가하고 새 청크 시작
             merged.append(current)
             current = seg.copy()
     merged.append(current)
-    
+
+    print(merged)
     return merged
 
 def load_audio_to_memory(file_path):
@@ -82,4 +86,8 @@ def load_audio_to_memory(file_path):
 
 def split_audio_memory(audio, start_time, stop_time):
     """메모리에 올라간 오디오 데이터를 자르고 반환"""
+    frame_rate = audio.frame_rate
+    start_time = (start_time * 1000) // frame_rate
+    stop_time = (stop_time * 1000) // frame_rate
+
     return audio[start_time:stop_time]  

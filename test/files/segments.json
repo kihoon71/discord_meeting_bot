@@ -1,0 +1,30 @@
+[
+    {
+        "start": 0.066,
+        "end": 2.0459375,
+        "label": 0,
+        "start_sample": 1056,
+        "end_sample": 1979359
+    },
+    {
+        "start": 124.034,
+        "end": 159.2619375,
+        "label": 1,
+        "start_sample": 1984544,
+        "end_sample": 3125616
+    },
+    {
+        "start": 195.351,
+        "end": 203.601,
+        "label": 0,
+        "start_sample": 3125616,
+        "end_sample": 3257616
+    },
+    {
+        "start": 203.601,
+        "end": 205.3099375,
+        "label": 1,
+        "start_sample": 3257616,
+        "end_sample": 3389665
+    }
+]
