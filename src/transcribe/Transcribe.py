@@ -26,7 +26,7 @@ class Transcribe:
         # Text 클래스의 인스턴스 생성
         text_instance = Text()
         for segment in segments:
-            audio_segment = split_audio_memory(audio_sample, segment['start_sample'], segment['end_sample'])
+            audio_segment = split_audio_memory(audio_sample, segment['start'], segment['end'])
             segment_duration_ms = len(audio_segment)
             print(f"expected duration: {segment['end_sample'] - segment['start_sample']}ms")
             print(f"Segment duration: {segment_duration_ms}ms for Speaker {segment['label']}")
@@ -44,6 +44,8 @@ class Transcribe:
             await text_instance.set_text(string_format)
 
         sorted_text = sorted(text_instance.get_text(), key=lambda x: float(x.split('-')[0]))
+
+        print(sorted_text)
         
         return sorted_text
     

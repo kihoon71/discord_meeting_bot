@@ -50,7 +50,6 @@ def process_segments(segments):
     
     # # 시작 시간이 오름차순으로 정렬되어 있지 않다면 정렬합니다.
     segments = sorted(segments, key=lambda s: float(s["start_sample"]))
-    print(segments)
     
     merged = []
     current = segments[0].copy()
@@ -67,7 +66,6 @@ def process_segments(segments):
             current = seg.copy()
     merged.append(current)
 
-    print(merged)
     return merged
 
 def load_audio_to_memory(file_path):
@@ -86,8 +84,7 @@ def load_audio_to_memory(file_path):
 
 def split_audio_memory(audio, start_time, stop_time):
     """메모리에 올라간 오디오 데이터를 자르고 반환"""
-    frame_rate = audio.frame_rate
-    start_time = (start_time * 1000) // frame_rate
-    stop_time = (stop_time * 1000) // frame_rate
+    start_time = (start_time * 1000)
+    stop_time = (stop_time * 1000)
 
     return audio[start_time:stop_time]  

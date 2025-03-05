@@ -148,7 +148,9 @@ def test_load_audio_to_memory(tmp_path, sample_audio):
 def test_split_audio_memory():
     """Tests if split_audio_memory correctly extracts a segment from audio."""
     sample_audio = AudioSegment.from_file('./files/test.wav', format="wav")
-    split_audio = split_audio_memory(sample_audio, 1984544 , 3125616)  
+    start = 0.066
+    end = 2.0459375
+    split_audio = split_audio_memory(sample_audio,  start, end)
 
     assert isinstance(split_audio, AudioSegment), "Split audio should be an AudioSegment object"
-    assert abs(len(split_audio) / 1000 - 23.773) < 0.001  # allowing tiny floating-point discrepancies
+    assert len(split_audio)  == (int(end*1000) - int(start*1000) + 1) # allowing tiny floating-point discrepancies
