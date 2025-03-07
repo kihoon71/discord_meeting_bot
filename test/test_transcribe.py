@@ -29,7 +29,8 @@ def test_dotenv(api_key):
 def transcribe():
     assert Transcribe is not None
     transcribe = Transcribe(
-        api_key=os.getenv("OPENAI_API_KEY")
+        api_key=os.getenv("OPENAI_API_KEY"),
+        channel_id='id 1'
     )
 
     return transcribe
@@ -42,6 +43,10 @@ async def test_transcription(transcribe):
     assert result is not None
     assert isinstance(result, list)
     assert isinstance(result[0], str)
+
+    text_instance = Text()
+
+    assert 'id 1' in text_instance.text
 
 
     

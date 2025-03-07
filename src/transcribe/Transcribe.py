@@ -9,13 +9,14 @@ from pprint import pprint
 import json
 
 class Transcribe:
-    def __init__(self, api_key):
+    def __init__(self, api_key, channel_id):
         '''
         api_key : str, whisper API key
         audio_data : bytes or path like object, audio data to transcribe
         '''
         self.diarizer = SpeakerDiarizer(embed_model='xvec', cluster_method='sc')
         self.whisper = OpenAI(api_key=api_key)
+        self.channel_id = channel_id
 
     async def transcribe(self, audio, num_speakers=2):
         segments = self.diarizer.diarize_(audio, num_speakers)
@@ -36,9 +37,9 @@ class Transcribe:
                 model="whisper-1"
                 )
             string_format = f"{segment['start']} - {segment['end']} - Speaker {segment['label']} - {transcript.text}"
-            await text_instance.set_text(string_format)
+            await text_instance.set_text(self.channel_id, string_format)
 
-        sorted_text = sorted(text_instance.get_text(), key=lambda x: float(x.split('-')[0]))
+        sorted_text = sorted(text_instance.get_text(self.channel_id), key=lambda x: float(x.split('-')[0]))
 
         print(sorted_text)
         

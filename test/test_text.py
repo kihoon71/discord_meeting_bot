@@ -21,30 +21,35 @@ async def test_set_text():
     text_instance = Text()
     
     # 텍스트 추가
-    await text_instance.set_text("Hello, World!")
+    await text_instance.set_text("id 1","Hello, World!")
     
     # 추가된 텍스트가 리스트에 있는지 확인
-    assert text_instance.get_text() == ["Hello, World!"]
+    assert text_instance.get_text('id 1') == ["Hello, World!"]
 
 @pytest.mark.asyncio
 async def test_multiple_set_text():
     text_instance = Text()
     
     # 여러 개의 텍스트를 추가
-    await text_instance.set_text("First")
-    await text_instance.set_text("Second")
+    await text_instance.set_text('id 1', "First")
+    await text_instance.set_text('id 2', "Second")
     
     # 추가된 텍스트가 리스트에 올바르게 저장되었는지 확인
-    text_instance.get_text() == ["Hello, World!", "First", "Second"]
+    text_instance.get_text('id 1') == ["Hello, World!", "First"]
+    text_instance.get_text('id 2') == ["Second"]
 
 def test_clear_text():
     text_instance = Text()
     
     # 텍스트 리스트 초기화
-    text_instance.clear_text()
+    text_instance.clear_text('id 1')
     
     # 리스트가 비었는지 확인
-    assert text_instance.get_text() == []
+    assert 'id 1' not in text_instance.text
+
+    text_instance.clear_text('id 2')
+
+    assert 'id 2' not in text_instance.text
 
 
 
