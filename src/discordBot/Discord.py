@@ -1,42 +1,47 @@
 import discord
 from datetime import datetime
-from dotenv import load_dotenv, find_dotenv
-from discord.ext import commands
-from discord.ext.commands import Bot
-from discord.ext.commands import Context
-from discord.ext.commands import CommandError
+from discord.ext import commands, tasks, 
+from discord.ext.commands import Context, CommandError, bot
 
-class Discord:
-    def __init__(self, token: str, guild: str):
+class DiscordBot(commands.Bot):
+    def __init__(self, token: str):
         self.token = token
-        self.guild = guild
-        self.client = None
-        self.recording = None
+        self.recording = {}
+        self.monitoring_channel = {} # {channel1: set(speaker1, speaekr2...), chanel2 : set(speaker1, speaker2...)}
 
-    ## Create a discord bot
-    def create_bot(self):
         intents = discord.Intents.all()
-        self.client = Bot(command_prefix='!', intents=intents)
+        super().__init__(command_prefix='!', intents=intents)
 
+        self.add_command(self.start_meeting)
+        self.add_command(self.end_meeting)
+        
+    
+    async def on_ready(self):
+        print(f"Logged in as {self.user}")
+        
     ## commands on !회의시작
-    ### this command recognize whether the channel is for voice chat or not
-    ### this command record the voice in the voice channel
-    ### this command save the text 
-    ### this command send a message to the user that the meeting has started
     @commands.command(name='회의시작', help='Start a meeting')
     async def start_meeting(self, ctx: Context):
+        '''
+        this command recognize whether the channel is for voice chat or not
+        this command record the voice in the voice channel
+        this command send a message to the user that the meeting has started
+        '''
 
         ## check if the channel is for voice chat
         if ctx.author.voice is None:
             await ctx.send('You are not in a voice channel')
             return
         
-        ## get the voice channel
+        ## to count speakers
+        self.monitoring_channel.update({ctx.channel.id: set()})
+        
+        # ## get the voice channel
         voice_channel = ctx.author.voice.channel
         voice_client = await voice_channel.connect()
 
-        ## start recording the voice
-        self.recording = await voice_client.listen(discord.AudioSource)
+        # ## start recording the voice
+        self.recording[ctx.channel.id] = await voice_client.listen(discord.AudioSource)
         await ctx.send('Starting a meeting')
 
 
@@ -47,17 +52,17 @@ class Discord:
     ## transport the text in the Text class to the agent
     @commands.command(name='회의종료', help='End a meeting')
     async def end_meeting(self, ctx: Context):
-        await ctx.send('Ending a meeting')
+        await ctx.send('End a meeting')
 
-    ## run the bot
-    def run(self):
+    @bot.event
+    async def on_voice_state_update(self, member, before, after):
 
-        @self.client.event
-        async def on_ready():
-            guild = discord.utils.get(self.client.guilds, name=self.guild)
+        if before.self_mute and not after.self_mute:
+            if member.voice.channel.id in self.monitoring_channel:
+                self.monitoring_channel[member.voice.channel.id].add(member)
 
-            print(f'{self.client.user} has connected to Discord! {guild.name}(id: {guild.id})')
-        self.client.run(self.token)
+        
+        
 
 
     

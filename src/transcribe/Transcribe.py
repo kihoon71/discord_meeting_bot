@@ -20,18 +20,13 @@ class Transcribe:
     async def transcribe(self, audio, num_speakers=2):
         segments = self.diarizer.diarize_(audio, num_speakers)
         audio_sample = AudioSegment.from_file(audio, format="wav")
-        print(f'sample rate of the audio sample: {audio_sample.frame_rate}')
-        print(f"Audio sample loaded : {len(audio_sample)} ms")
         
         # Text 클래스의 인스턴스 생성
         text_instance = Text()
         for segment in segments:
             audio_segment = split_audio_memory(audio_sample, segment['start'], segment['end'])
-            segment_duration_ms = len(audio_segment)
-            print(f"expected duration: {segment['end_sample'] - segment['start_sample']}ms")
-            print(f"Segment duration: {segment_duration_ms}ms for Speaker {segment['label']}")
             
-            temp_file_for_whisper = io.BytesIO()
+            temp_file_for_whisper = io.BytesIO() # to send a file to the whisper API
             audio_segment.export(temp_file_for_whisper, format="wav")
             temp_file_for_whisper.seek(0)
 
