@@ -4,7 +4,8 @@ import sys
 import os
 
 # 현재 스크립트 파일 기준으로 src 경로 추가
-sys.path.append(os.path.abspath("../src/transcribe"))
+sys.path.append(os.path.abspath("../src/UTIL"))
+
 
 # 이제 Text를 import 가능
 from Text import Text # Text.py 파일이 존재한다고 가정
@@ -45,11 +46,21 @@ def test_clear_text():
     text_instance.clear_text('id 1')
     
     # 리스트가 비었는지 확인
-    assert 'id 1' not in text_instance.text
+    assert 'id 1' not in text_instance.data
 
     text_instance.clear_text('id 2')
 
-    assert 'id 2' not in text_instance.text
+    assert 'id 2' not in text_instance.data
+
+
+def test_is_same_instance():
+    text_instance1 = Text()
+    text_instance2 = Text()
+    
+    # 두 인스턴스가 같은지 확인
+    assert text_instance1 is text_instance2
+    assert text_instance1 == text_instance2
+    assert id(text_instance1) == id(text_instance2)
 
 
 
