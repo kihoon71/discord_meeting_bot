@@ -7,7 +7,8 @@ import io
 
 from pydub import AudioSegment
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src/transcribe"))
+# sys.path.append(os.path.join(os.path.dirname(__file__), "../src/transcribe"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../src/UTIL"))
 
 from Util import create_temp_file, process_segments, load_audio_to_memory, split_audio_memory
 

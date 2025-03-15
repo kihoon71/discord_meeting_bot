@@ -2,13 +2,12 @@ import os
 import io
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../UTIL"))
-from Text import Text
+from UTIL.Text import Text
+from UTIL.Util import load_audio_to_memory, split_audio_memory, create_temp_file
 
 from openai import OpenAI
 from pydub import AudioSegment
-from Util import load_audio_to_memory, split_audio_memory, create_temp_file
-from Diarizer import SpeakerDiarizer
+from transcribe.Diarizer import SpeakerDiarizer
 from pprint import pprint
 import json
 

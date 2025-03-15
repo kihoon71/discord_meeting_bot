@@ -1,4 +1,4 @@
-from .AsyncSingletonMeta import DataStore
+from UTIL.AsyncSingletonMeta import DataStore
 from pydub import AudioSegment
 from io import BytesIO
 import mimetypes

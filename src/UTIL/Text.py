@@ -1,4 +1,4 @@
-from .AsyncSingletonMeta import DataStore
+from UTIL.AsyncSingletonMeta import DataStore
 
 class Text(DataStore):
     

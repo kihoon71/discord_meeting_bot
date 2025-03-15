@@ -6,11 +6,11 @@ import io
 import dotenv
 from pydub import AudioSegment
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src/transcribe"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 
-from Util import load_audio_to_memory
-from Transcribe import Transcribe
-from Text import Text
+from UTIL.Util import load_audio_to_memory
+from transcribe.Transcribe import Transcribe
+from UTIL.Text import Text
 
 
 @pytest.fixture(scope="module")
@@ -46,7 +46,4 @@ async def test_transcription(transcribe):
 
     text_instance = Text()
 
-    assert 'id 1' in text_instance.text
-
-
-    
+    assert 'id 1' in text_instance.data

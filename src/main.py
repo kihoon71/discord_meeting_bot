@@ -34,12 +34,6 @@ async def start_meeting(ctx):
     start_time = datetime.now()
     filename = f"./temp/{start_time.strftime('%Y%m%d%H%M%S')}.wav"
 
-    sink = discord.sinks.WaveSink()
-    voice_client.start_recording(
-        sink, 
-        filename, 
-        format='wav')
-
     AUDIO.set_audio(channel_id, filename)
 
     

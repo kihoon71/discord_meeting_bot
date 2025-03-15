@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../src/transcribe"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../src/UTIL"))
 
 from Diarizer import SpeakerDiarizer
 from Util import create_temp_file, process_segments
@@ -37,8 +38,6 @@ def test_diarize(diarizer):
     num_speakers = 2
     
     processed_segments = diarizer.diarize_(test_wav, num_speakers)
-
-    print(processed_segments)
 
     num_labels = {seg["label"] for seg in processed_segments}
 

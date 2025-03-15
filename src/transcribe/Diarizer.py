@@ -3,7 +3,9 @@ from pydub import AudioSegment
 import soundfile as sf
 import numpy as np
 import os
-from Util import create_temp_file, process_segments
+import sys
+
+from UTIL.Util import create_temp_file, process_segments
 
 class SpeakerDiarizer:
     def __init__(self, embed_model='xvec', cluster_method='sc'):
